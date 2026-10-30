@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roadside Bites | Fast Food Ordering</title>
+<style>
+:root{
+  --red:#e51d25;--red-dark:#c9141b;--yellow:#ffbf22;--ink:#202124;
+  --muted:#667085;--line:#e7e9ee;--paper:#fff;--soft:#f7f8fa;
+  --green:#16883d;--navy:#171b20;--radius:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.45}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.container{width:min(1200px,94%);margin:auto}
+.topbar{height:72px;background:#171b20;color:#fff;position:sticky;top:0;z-index:20;box-shadow:0 3px 12px #0002}
+.nav{height:100%;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:850;font-size:24px;white-space:nowrap}
+.brand-icon{width:46px;height:46px;display:grid;place-items:center;background:var(--yellow);border-radius:50%;font-size:27px}
+.brand span em{font-style:normal;color:var(--yellow)}
+.brand small{display:block;font-size:11px;font-weight:500;color:#ddd;letter-spacing:.5px}
+.navlinks{display:flex;align-items:center;gap:10px}
+.navlinks a{padding:10px 16px;border-radius:24px;font-size:14px;font-weight:700}
+.navlinks a:hover,.navlinks a.active{background:var(--red);color:white}
+.cart-nav{border:0;background:var(--yellow);color:#171717;padding:12px 17px;border-radius:25px;font-weight:800}
+.menu-toggle{display:none;border:0;background:transparent;color:#fff;font-size:25px}
+.hero{min-height:310px;background:linear-gradient(90deg,#1b0d05ee 0%,#281308d9 37%,#2813081c 72%),url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1800&q=85') center 52%/cover;color:#fff;display:flex;align-items:center}
+.hero-content{padding:42px 0}
+.hero h1{font-size:clamp(36px,5vw,62px);line-height:1.03;margin:0 0 12px;font-weight:900;max-width:600px}
+.hero h1 span{display:block;color:var(--yellow);font-style:italic}
+.hero p{font-size:18px;max-width:420px;margin:0 0 22px}
+.btn{border:0;border-radius:9px;padding:12px 18px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.2s}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover{background:var(--red-dark);transform:translateY(-1px)}
+.btn-yellow{background:var(--yellow);color:#1d1d1d}.btn-outline{background:#fff;border:1px solid var(--line);color:#30343b}
+.features{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line);background:#fff}
+.feature{padding:20px 12px;text-align:center;border-right:1px solid var(--line)}
+.feature:last-child{border:0}.feature .emoji{font-size:25px;color:var(--red)}
+.feature strong{display:block;font-size:14px;margin-top:4px}.feature small{color:var(--muted);font-size:12px}
+.section{padding:38px 0}
+.section-heading{text-align:center;margin:0 0 22px;font-size:30px;font-weight:900}
+.section-heading:after{content:"";display:block;width:54px;height:4px;border-radius:4px;background:var(--red);margin:9px auto 0}
+.order-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:24px;align-items:start}
+.category-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.category-pill{border:0;background:#f0f2f5;padding:9px 16px;border-radius:22px;font-size:13px;font-weight:750;color:#3e434b}
+.category-pill.active,.category-pill:hover{background:var(--red);color:white}
+.food-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.food-card{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:white;box-shadow:0 3px 10px #00000008;transition:.2s}
+.food-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px #00000012}
+.food-card img{width:100%;height:125px;object-fit:cover;display:block;background:#f2f2f2}
+.food-info{padding:11px}
+.food-info h3{font-size:14px;margin:0 0 4px}
+.food-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:8px 0}
+.price{font-size:16px;font-weight:900;color:var(--red)}
+.food-tag{font-size:10px;color:#69717d;background:#f4f5f7;padding:4px 7px;border-radius:20px}
+.add-btn{width:100%;border:1px solid var(--red);color:var(--red);background:#fff;border-radius:7px;padding:8px;font-weight:800;font-size:12px}
+.add-btn:hover{background:var(--red);color:#fff}
+.cart-panel{border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 4px 15px #00000009;position:sticky;top:90px;background:#fff}
+.cart-title{background:var(--red);color:#fff;padding:14px 16px;font-size:19px;font-weight:850}
+.cart-body{padding:14px}
+.cart-empty{text-align:center;color:var(--muted);padding:22px 6px}
+.cart-item{display:grid;grid-template-columns:1fr auto;gap:8px;padding:12px 0;border-bottom:1px solid var(--line)}
+.cart-item-name{font-weight:750;font-size:13px}.cart-item-sub{color:var(--muted);font-size:12px}
+.cart-controls{display:flex;align-items:center;gap:6px;margin-top:7px}
+.qty-btn{width:25px;height:25px;border:1px solid var(--line);background:#f8f8f8;border-radius:5px;font-weight:900}
+.qty{min-width:18px;text-align:center;font-size:13px}
+.remove-btn{border:0;background:transparent;color:var(--red);font-size:17px;padding:0 3px}
+.cart-line-total{font-size:13px;font-weight:800;white-space:nowrap}
+.cart-total{display:flex;justify-content:space-between;align-items:center;padding:16px 0;font-weight:800}
+.cart-total strong{color:var(--red);font-size:23px}
+.cart-panel .btn{width:100%}
+.cart-note{background:#eef6ff;border:1px solid #d2e7ff;border-radius:9px;padding:11px;margin-top:12px;font-size:12px;color:#275078}
+.promo{margin-top:26px;border-radius:15px;min-height:150px;padding:28px;color:#fff;background:linear-gradient(90deg,#111a20ee,#111a2050),url('https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=1400&q=80') center/cover}
+.promo h2{margin:0;font-size:27px}.promo h2 span{color:var(--yellow)}.promo p{margin:5px 0 16px}
+.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.how-card{text-align:center;padding:20px 10px;border:1px solid var(--line);border-radius:12px}
+.how-card .emoji{font-size:27px}.how-card strong{display:block;margin:8px 0 3px}.how-card small{color:var(--muted)}
+.payment-section{background:#fafbfc;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.payment-options{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.payment-option{display:flex;align-items:center;gap:12px;padding:16px;border:1px solid var(--line);border-radius:11px;background:white;cursor:pointer}
+.payment-option:has(input:checked){border-color:#4388ff;background:#eff6ff;box-shadow:0 0 0 1px #4388ff}
+.payment-option input{accent-color:#1769ff;width:18px;height:18px}
+.payment-option .pay-icon{font-size:24px}.payment-option strong{display:block;font-size:14px}.payment-option small{font-size:11px;color:var(--muted)}
+.pay-bottom{display:flex;justify-content:center;margin-top:20px}
+.token-result{display:none;margin-top:22px;background:#edfaef;border:1px solid #b9e7c1;border-radius:14px;padding:20px;align-items:center;justify-content:space-between;gap:20px}
+.token-result.show{display:flex}
+.token-left{display:flex;align-items:center;gap:16px}.check-circle{background:#12983e;color:white;border-radius:50%;width:60px;height:60px;display:grid;place-items:center;font-size:34px;flex-shrink:0}
+.token-result h3{color:#148037;margin:0 0 4px;font-size:21px}.token-no{background:var(--red);color:#fff;border-radius:9px;padding:8px 15px;font-size:24px;font-weight:900;display:inline-block}
+.token-items{background:#fff;border:1px solid #d7ecd9;border-radius:10px;padding:12px;min-width:210px;font-size:13px}
+.token-items h4{margin:0 0 8px}.token-row{display:flex;justify-content:space-between;gap:15px;margin:5px 0}
+.footer{background:#171b20;color:#fff;padding:27px 0 12px}
+.footer-main{display:grid;grid-template-columns:1.2fr 1fr 1fr 1.3fr;gap:20px;align-items:start}
+.footer h4{margin:0 0 10px}.footer p,.footer a{color:#d0d3d7;font-size:13px}.footer-links{display:grid;gap:5px}
+.footer-bottom{text-align:center;border-top:1px solid #42464b;margin-top:20px;padding-top:12px;color:#c5c7ca;font-size:11px}
+.admin-wrap{background:#f1f5f9;padding:34px 0 45px;border-top:5px solid var(--yellow)}
+.admin-top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:18px}
+.admin-top h2{margin:0;font-size:27px}.admin-top p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.admin-badge{background:#e0eaff;color:#1c55a7;padding:8px 12px;border-radius:8px;font-weight:800;font-size:12px}
+.admin-layout{display:grid;grid-template-columns:205px minmax(0,1fr);gap:18px}
+.admin-sidebar{background:#1b2532;color:white;border-radius:12px;padding:15px;height:max-content}
+.admin-sidebar h3{font-size:16px;margin:0 0 14px}
+.admin-side-link{display:block;padding:10px;border-radius:7px;font-size:13px;color:#d8e0ea;margin:4px 0}
+.admin-side-link.active,.admin-side-link:hover{background:#1769d2;color:white}
+.admin-content{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(260px,.9fr);gap:16px;align-items:start}
+.admin-card{background:#fff;border:1px solid #e1e7ef;border-radius:12px;padding:17px;box-shadow:0 3px 10px #20304008}
+.admin-card h3{margin:0 0 13px;font-size:17px}
+.admin-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.admin-card-head h3{margin:0}
+.admin-table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{padding:11px 9px;text-align:left;border-bottom:1px solid #e8edf3;white-space:nowrap}
+th{background:#f4f7fb;color:#465365;font-weight:800}
+.status{background:#e0f6e6;color:#18783a;border-radius:20px;padding:4px 8px;font-size:11px;font-weight:800}
+.small-btn{border:0;border-radius:6px;padding:7px 9px;font-size:11px;font-weight:800}
+.edit-btn{background:#e6efff;color:#1755a6}.delete-btn{background:#ffebeb;color:#c51b22}
+.form-group{margin-bottom:13px}
+.form-group label{display:block;font-size:12px;font-weight:800;margin-bottom:6px}
+.form-group input,.form-group select{width:100%;padding:10px;border:1px solid #d6dde7;border-radius:7px;background:white;outline:none}
+.form-group input:focus,.form-group select:focus{border-color:#4788ed;box-shadow:0 0 0 3px #4788ed20}
+.form-actions{display:flex;gap:8px;flex-wrap:wrap}
+.admin-hint{font-size:11px;color:#64748b;margin-top:12px;line-height:1.5}
+.toast{position:fixed;right:20px;bottom:20px;background:#171b20;color:#fff;padding:13px 18px;border-radius:10px;box-shadow:0 5px 25px #0003;z-index:50;display:none;max-width:320px;font-size:13px}
+.toast.show{display:block}
+.modal-backdrop{display:none;position:fixed;inset:0;background:#0008;z-index:60;align-items:center;justify-content:center;padding:18px}
+.modal-backdrop.show{display:flex}
+.modal{background:white;border-radius:15px;padding:24px;width:min(440px,100%);box-shadow:0 20px 80px #0004}
+.modal h2{margin:0 0 8px}.modal p{color:var(--muted);font-size:13px}
+@media(max-width:1000px){
+ .food-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .order-layout{grid-template-columns:minmax(0,1fr) 285px}
+ .admin-content{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+ .topbar{height:64px}.brand{font-size:19px}.brand-icon{width:38px;height:38px;font-size:22px}
+ .menu-toggle{display:block}.navlinks{display:none;position:absolute;top:64px;left:0;right:0;background:#171b20;padding:12px 3%;flex-direction:column;align-items:stretch}
+ .navlinks.open{display:flex}.navlinks a{padding:12px}
+ .cart-nav{padding:10px 12px;font-size:12px}
+ .hero{min-height:270px;background-position:60% center}.hero-content{padding:32px 0}.hero p{font-size:15px;max-width:300px}
+ .features{grid-template-columns:repeat(2,1fr)}.feature:nth-child(2){border-right:0}.feature:nth-child(-n+2){border-bottom:1px solid var(--line)}
+ .section{padding:28px 0}.section-heading{font-size:25px}
+ .order-layout{grid-template-columns:1fr}.cart-panel{position:static;grid-row:1}
+ .food-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.food-card img{height:115px}
+ .payment-options{grid-template-columns:1fr}.payment-option{padding:12px}
+ .how-grid{grid-template-columns:repeat(2,1fr)}
+ .token-result{align-items:stretch;flex-direction:column}.token-left{align-items:flex-start}.token-items{min-width:0}
+ .footer-main{grid-template-columns:repeat(2,1fr)}
+ .admin-layout{grid-template-columns:1fr}.admin-sidebar{display:flex;flex-wrap:wrap;gap:5px;align-items:center}.admin-sidebar h3{width:100%}.admin-side-link{margin:0}
+ .admin-top{align-items:flex-start;flex-direction:column}.admin-top h2{font-size:24px}
+}
+@media(max-width:400px){.food-grid{grid-template-columns:1fr 1fr}.food-card img{height:95px}.food-info{padding:8px}.food-info h3{font-size:12px}.brand small{font-size:9px}.footer-main{grid-template-columns:1fr}}
+@media print{.topbar,.hero,.features,.section:not(#order),.payment-section .section-heading,.payment-options,.pay-bottom,.footer,.admin-wrap{display:none!important}.token-result{display:flex!important}.token-result .token-items{display:block}body{background:#fff}.container{width:100%}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="container nav">
+    <a class="brand" href="#home" aria-label="Roadside Bites home"><span class="brand-icon">🍔</span><span>Roadside <em>Bites</em><small>FRESH • TASTY • FAST</small></span></a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">☰</button>
+    <nav class="navlinks" id="navLinks">
+      <a class="active" href="#home">⌂ Home</a><a href="#menu">♨ Menu</a><a href="#how">ⓘ How It Works</a><a href="#contact">☎ Contact</a>
+    </nav>
+    <button class="cart-nav" onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">🛒 My Order (<span id="cartCount">0</span>)</button>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="container hero-content">
+    <h1>Good Food <span>Good Mood</span></h1>
+    <p>Delicious fast food, fresh ingredients, and quick service — right at your roadside stop!</p>
+    <a class="btn btn-yellow" href="#menu">🍟 Order Now &nbsp; →</a>
+  </div>
+</section>
+
+<div class="container features">
+  <div class="feature"><div class="emoji">🍅</div><strong>Fresh & Tasty</strong><small>Quality ingredients</small></div>
+  <div class="feature"><div class="emoji">⏱️</div><strong>Fast Service</strong><small>No long wait</small></div>
+  <div class="feature"><div class="emoji">🛡️</div><strong>Hygienic Food</strong><small>Made fresh for you</small></div>
+  <div class="feature"><div class="emoji">📍</div><strong>Roadside Location</strong><small>Easy to find</small></div>
+</div>
+
+<main>
+<section class="section container" id="menu">
+  <h2 class="section-heading">🍴 Our Menu</h2>
+  <div class="order-layout">
+    <div>
+      <div class="category-pills" id="categoryPills" aria-label="Food categories"></div>
+      <div class="food-grid" id="foodGrid"></div>
+      <div class="promo">
+        <h2>Tasty Food<br><span>Always a Good Idea</span></h2>
+        <p>Your favorite food, just a few clicks away!</p>
+        <a class="btn btn-yellow" href="#menu">View Full Menu →</a>
+      </div>
+    </div>
+    <aside class="cart-panel" id="order">
+      <div class="cart-title">🛒 Your Order</div>
+      <div class="cart-body">
+        <div id="cartItems"><div class="cart-empty">Your cart is empty.<br>Choose something delicious!</div></div>
+        <div class="cart-total"><span>Total Amount</span><strong id="cartTotal">₹0</strong></div>
+        <button class="btn btn-red" id="proceedBtn" onclick="goToPayment()">▣ Proceed to Payment →</button>
+        <div class="cart-note">ⓘ You can review your order before making the payment.</div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="section" id="how" style="background:#fafbfc">
+  <div class="container">
+    <h2 class="section-heading">How It Works</h2>
+    <div class="how-grid">
+      <div class="how-card"><div class="emoji">🍔</div><strong>1. Browse Menu</strong><small>Choose your favorite food</small></div>
+      <div class="how-card"><div class="emoji">🛍️</div><strong>2. Add to Cart</strong><small>Select items and quantity</small></div>
+      <div class="how-card"><div class="emoji">💳</div><strong>3. Make Payment</strong><small>Select a payment method</small></div>
+      <div class="how-card"><div class="emoji">🎟️</div><strong>4. Get Your Token</strong><small>Show it to the seller</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="payment-section section" id="payment">
+  <div class="container">
+    <h2 class="section-heading">💳 Payment Method</h2>
+    <div class="payment-options">
+      <label class="payment-option"><input type="radio" name="paymentMethod" value="UPI" checked><span class="pay-icon">📲</span><span><strong>UPI</strong><small>Google Pay, PhonePe, Paytm</small></span></label>
+      <label class="payment-option"><input type="radio" name="paymentMethod" value="Card"><span class="pay-icon">💳</span><span><strong>Credit / Debit Card</strong><small>Visa, Mastercard, RuPay</small></span></label>
+      <label class="payment-option"><input type="radio" name="paymentMethod" value="Cash"><span class="pay-icon">💵</span><span><strong>Cash at Counter</strong><small>Pay directly to the seller</small></span></label>
+    </div>
+    <div class="pay-bottom"><button class="btn btn-red" id="payBtn" onclick="placeOrder()">🔒 Confirm Demo Order · <span id="payAmount">₹0</span></button></div>
+    <div class="token-result" id="tokenResult">
+      <div class="token-left">
+        <div class="check-circle">✓</div>
+        <div><h3>Your Order Has Been Placed!</h3><div style="margin:5px 0 8px">Your Token No. is <span class="token-no" id="tokenNo">RB-0001</span></div><small>Please show this token to the seller to collect your food.</small></div>
+      </div>
+      <div class="token-items"><h4>Order Details</h4><div id="tokenOrderRows"></div><hr style="border:0;border-top:1px solid #e5e7eb"><div class="token-row"><strong>Total</strong><strong id="tokenTotal">₹0</strong></div><div class="token-row"><span>Payment</span><span id="tokenPayment">UPI</span></div><button class="btn btn-outline" style="width:100%;margin-top:10px" onclick="window.print()">🖨 Print Token</button></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer" id="contact">
+  <div class="container">
+    <div class="footer-main">
+      <div><a class="brand" href="#home"><span class="brand-icon">🍔</span><span>Roadside <em>Bites</em><small>FRESH • TASTY • FAST</small></span></a></div>
+      <div><h4>Quick Links</h4><div class="footer-links"><a href="#home">Home</a><a href="#menu">Menu</a><a href="#how">How It Works</a><a href="#contact">Contact</a></div></div>
+      <div><h4>Follow Us</h4><p style="font-size:22px">ⓕ &nbsp; ◎ &nbsp; ▶</p><p>Fresh food. Happy mood.</p></div>
+      <div><h4>Contact Us</h4><p>📍 Your Road, Your City</p><p>☎ +91 98765 43210</p><p>Open daily · 10 AM – 10 PM</p></div>
+    </div>
+    <div class="footer-bottom">© 2026 Roadside Bites. All rights reserved. · Demo prototype</div>
+  </div>
+</footer>
+
+<section class="admin-wrap" id="admin">
+  <div class="container">
+    <div class="admin-top"><div><h2>⚙ Admin Dashboard</h2><p>Manage food categories and menu items for your fast-food center.</p></div><span class="admin-badge">DEMO ADMIN PANEL</span></div>
+    <div class="admin-layout">
+      <aside class="admin-sidebar">
+        <h3>🍔 Roadside Bites</h3>
+        <a class="admin-side-link active" href="#admin">▦ Dashboard</a>
+        <a class="admin-side-link" href="#categoryManager">▤ Manage Categories</a>
+        <a class="admin-side-link" href="#foodManager">🍟 Manage Menu</a>
+        <a class="admin-side-link" href="#order">🧾 View Orders</a>
+        <a class="admin-side-link" href="#contact">⚙ Settings</a>
+      </aside>
+      <div class="admin-content">
+        <div class="admin-card" id="categoryManager">
+          <div class="admin-card-head"><h3>Manage Food Categories</h3><button class="btn btn-red" style="padding:8px 10px;font-size:12px" onclick="resetCategoryForm()">＋ Add Category</button></div>
+          <div class="admin-table-wrap">
+            <table><thead><tr><th>#</th><th>Category Name</th><th>Icon</th><th>Status</th><th>Action</th></tr></thead><tbody id="categoryTable"></tbody></table>
+          </div>
+          <p class="admin-hint">Tip: Add categories such as Burgers, Pizza, Sandwiches, Snacks, Beverages, or Desserts. This demo stores changes in this page only.</p>
+        </div>
+        <div class="admin-card">
+          <h3 id="categoryFormTitle">Add / Edit Category</h3>
+          <form id="categoryForm">
+            <input type="hidden" id="editCategoryId">
+            <div class="form-group"><label for="categoryName">Category Name *</label><input id="categoryName" required maxlength="40" placeholder="e.g. Momos"></div>
+            <div class="form-group"><label for="categoryIcon">Icon / Emoji</label><input id="categoryIcon" maxlength="8" placeholder="e.g. 🥟"></div>
+            <div class="form-group"><label for="categoryStatus">Status</label><select id="categoryStatus"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
+            <div class="form-actions"><button class="btn btn-red" type="submit">💾 Save Category</button><button class="btn btn-outline" type="button" onclick="resetCategoryForm()">Cancel</button></div>
+          </form>
+          <p class="admin-hint">In the final application, only an authenticated admin should be able to access this panel.</p>
+        </div>
+        <div class="admin-card" id="foodManager" style="grid-column:1/-1">
+          <div class="admin-card-head"><h3>Manage Menu Items</h3><button class="btn btn-red" style="padding:8px 10px;font-size:12px" onclick="openFoodForm()">＋ Add Food Item</button></div>
+          <div class="admin-table-wrap"><table><thead><tr><th>Item</th><th>Category</th><th>Price</th><th>Status</th><th>Action</th></tr></thead><tbody id="adminFoodTable"></tbody></table></div>
+          <form id="foodForm" style="display:none;border-top:1px solid var(--line);margin-top:18px;padding-top:18px">
+            <h3 id="foodFormTitle">Add Food Item</h3><input type="hidden" id="editFoodId">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
+              <div class="form-group"><label for="foodName">Food Name *</label><input id="foodName" required maxlength="60" placeholder="e.g. Paneer Burger"></div>
+              <div class="form-group"><label for="foodCategory">Category *</label><select id="foodCategory" required></select></div>
+              <div class="form-group"><label for="foodPrice">Price (₹) *</label><input id="foodPrice" type="number" min="1" step="1" required placeholder="e.g. 80"></div>
+              <div class="form-group"><label for="foodImage">Image URL (optional)</label><input id="foodImage" type="url" placeholder="https://..."></div>
+              <div class="form-group"><label for="foodStatus">Status</label><select id="foodStatus"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
+            </div>
+            <div class="form-actions"><button class="btn btn-red" type="submit">💾 Save Food Item</button><button class="btn btn-outline" type="button" onclick="closeFoodForm()">Cancel</button></div>
+          </form>
+          <p class="admin-hint">Menu edits here update the customer menu during this browser session. This is a front-end prototype; database persistence and secure admin login will be added later.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="toast" id="toast" role="status"></div>
+<div class="modal-backdrop" id="emptyModal"><div class="modal"><h2>🛒 Your cart is empty</h2><p>Please add at least one food item before proceeding to payment.</p><button class="btn btn-red" onclick="closeEmptyModal()">Browse Menu</button></div></div>
+
+<script>
+const initialCategories = [
+ {id:1,name:'Burgers',icon:'🍔',status:'Active'},
+ {id:2,name:'Pizza',icon:'🍕',status:'Active'},
+ {id:3,name:'Snacks',icon:'🍟',status:'Active'},
+ {id:4,name:'Sandwiches',icon:'🥪',status:'Active'},
+ {id:5,name:'Beverages',icon:'🥤',status:'Active'},
+ {id:6,name:'Desserts',icon:'🍨',status:'Active'}
+];
+const initialFoods = [
+ {id:1,name:'Veg Burger',category:'Burgers',price:60,status:'Active',image:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80'},
+ {id:2,name:'Chicken Burger',category:'Burgers',price:80,status:'Active',image:'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80'},
+ {id:3,name:'Veg Pizza',category:'Pizza',price:120,status:'Active',image:'https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=600&q=80'},
+ {id:4,name:'French Fries',category:'Snacks',price:50,status:'Active',image:'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80'},
+ {id:5,name:'Cold Drink',category:'Beverages',price:30,status:'Active',image:'https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=600&q=80'},
+ {id:6,name:'Ice Cream',category:'Desserts',price:40,status:'Active',image:'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=600&q=80'},
+ {id:7,name:'Cheese Sandwich',category:'Sandwiches',price:90,status:'Active',image:'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=600&q=80'},
+ {id:8,name:'Veg Noodles',category:'Snacks',price:70,status:'Active',image:'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80'}
+];
+let categories = initialCategories.map(x=>({...x}));
+let foods = initialFoods.map(x=>({...x}));
+let cart = {};
+let activeCategory = 'All';
+let nextCategoryId = 7;
+let nextFoodId = 9;
+let toastTimer;
+const money = n => '₹' + Number(n).toLocaleString('en-IN');
+const escapeHtml = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function showToast(message){const t=document.getElementById('toast');t.textContent=message;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2600)}
+function renderCategories(){
+ const active=categories.filter(c=>c.status==='Active');
+ if(activeCategory!=='All'&&!active.some(c=>c.name===activeCategory)) activeCategory='All';
+ document.getElementById('categoryPills').innerHTML=
+  `<button class="category-pill ${activeCategory==='All'?'active':''}" onclick="setCategory('All')">▦ All</button>`+
+  active.map(c=>`<button class="category-pill ${activeCategory===c.name?'active':''}" onclick="setCategory('${escapeHtml(c.name).replace(/'/g,"\\'")}')">${escapeHtml(c.icon||'🍴')} ${escapeHtml(c.name)}</button>`).join('');
+ renderFoods(); renderFoodCategorySelect();
+}
+function setCategory(name){activeCategory=name;renderCategories()}
+function renderFoods(){
+ const list=foods.filter(f=>f.status==='Active'&&(activeCategory==='All'||f.category===activeCategory));
+ document.getElementById('foodGrid').innerHTML=list.length?list.map(f=>`
+  <article class="food-card">
+   <img src="${escapeHtml(f.image||'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=600&q=80')}" alt="${escapeHtml(f.name)}" loading="lazy" onerror="this.src='https://placehold.co/600x400/f5f5f5/333?text=Food+Photo'">
+   <div class="food-info"><h3>${escapeHtml(f.name)}</h3><div class="food-meta"><span class="price">${money(f.price)}</span><span class="food-tag">${escapeHtml(f.category)}</span></div><button class="add-btn" onclick="addToCart(${f.id})">＋ Add to Order</button></div>
+  </article>`).join(''):'<p style="color:#667085;padding:18px">No active food items in this category yet.</p>';
+}
+function addToCart(id){const f=foods.find(x=>x.id===id);if(!f)return;if(cart[id])cart[id].qty++;else cart[id]={id:f.id,name:f.name,price:Number(f.price),qty:1};renderCart();showToast(f.name+' added to your order.')}
+function changeQty(id,delta){if(!cart[id])return;cart[id].qty+=delta;if(cart[id].qty<=0)delete cart[id];renderCart()}
+function removeFromCart(id){delete cart[id];renderCart()}
+function cartTotal(){return Object.values(cart).reduce((sum,x)=>sum+x.price*x.qty,0)}
+function cartCount(){return Object.values(cart).reduce((sum,x)=>sum+x.qty,0)}
+function renderCart(){
+ const items=Object.values(cart);
+ document.getElementById('cartCount').textContent=cartCount();
+ document.getElementById('cartTotal').textContent=money(cartTotal());
+ document.getElementById('payAmount').textContent=money(cartTotal());
+ document.getElementById('cartItems').innerHTML=items.length?items.map(x=>`
+ <div class="cart-item"><div><div class="cart-item-name">${escapeHtml(x.name)}</div><div class="cart-item-sub">${money(x.price)} each</div><div class="cart-controls"><button class="qty-btn" onclick="changeQty(${x.id},-1)" aria-label="Decrease quantity">−</button><span class="qty">${x.qty}</span><button class="qty-btn" onclick="changeQty(${x.id},1)" aria-label="Increase quantity">+</button><button class="remove-btn" onclick="removeFromCart(${x.id})" aria-label="Remove item">🗑</button></div></div><div class="cart-line-total">${money(x.price*x.qty)}</div></div>`).join(''):'<div class="cart-empty">Your cart is empty.<br>Choose something delicious!</div>';
+}
+function goToPayment(){if(!cartCount()){document.getElementById('emptyModal').classList.add('show');return}document.getElementById('payment').scrollIntoView({behavior:'smooth'})}
+function closeEmptyModal(){document.getElementById('emptyModal').classList.remove('show');document.getElementById('menu').scrollIntoView({behavior:'smooth'})}
+function placeOrder(){
+ if(!cartCount()){document.getElementById('emptyModal').classList.add('show');return}
+ const method=document.querySelector('input[name="paymentMethod"]:checked').value;
+ // Demo only: no real payment is processed.
+ const token='RB-'+String(Date.now()).slice(-6);
+ document.getElementById('tokenNo').textContent=token;
+ document.getElementById('tokenOrderRows').innerHTML=Object.values(cart).map(x=>`<div class="token-row"><span>${escapeHtml(x.name)} × ${x.qty}</span><strong>${money(x.price*x.qty)}</strong></div>`).join('');
+ document.getElementById('tokenTotal').textContent=money(cartTotal());
+ document.getElementById('tokenPayment').textContent=method==='Cash'?'Cash at Counter':method;
+ document.getElementById('tokenResult').classList.add('show');
+ document.getElementById('tokenResult').scrollIntoView({behavior:'smooth',block:'center'});
+ showToast('Demo order placed. Token generated!');
+}
+function renderCategoryTable(){
+ document.getElementById('categoryTable').innerHTML=categories.map((c,i)=>`<tr><td>${i+1}</td><td>${escapeHtml(c.name)}</td><td style="font-size:20px">${escapeHtml(c.icon||'🍴')}</td><td><span class="status" style="${c.status==='Inactive'?'background:#eef0f3;color:#667085':''}">${c.status}</span></td><td><button class="small-btn edit-btn" onclick="editCategory(${c.id})">Edit</button> <button class="small-btn delete-btn" onclick="deleteCategory(${c.id})">Delete</button></td></tr>`).join('')||'<tr><td colspan="5">No categories added yet.</td></tr>';
+}
+function resetCategoryForm(){document.getElementById('categoryForm').reset();document.getElementById('editCategoryId').value='';document.getElementById('categoryFormTitle').textContent='Add / Edit Category'}
+function editCategory(id){const c=categories.find(x=>x.id===id);if(!c)return;document.getElementById('editCategoryId').value=c.id;document.getElementById('categoryName').value=c.name;document.getElementById('categoryIcon').value=c.icon;document.getElementById('categoryStatus').value=c.status;document.getElementById('categoryFormTitle').textContent='Edit Category';document.getElementById('categoryManager').scrollIntoView({behavior:'smooth'});document.getElementById('categoryName').focus()}
+function deleteCategory(id){const c=categories.find(x=>x.id===id);if(!c)return;if(foods.some(f=>f.category===c.name)){showToast('Move or delete this category’s food items first.');return}if(!confirm('Delete category "'+c.name+'"?'))return;categories=categories.filter(x=>x.id!==id);renderAllAdmin();renderCategories();showToast('Category deleted.')}
+document.getElementById('categoryForm').addEventListener('submit',e=>{
+ e.preventDefault();const id=Number(document.getElementById('editCategoryId').value);const name=document.getElementById('categoryName').value.trim();const icon=document.getElementById('categoryIcon').value.trim()||'🍴';const status=document.getElementById('categoryStatus').value;
+ if(!name)return;if(categories.some(c=>c.name.toLowerCase()===name.toLowerCase()&&c.id!==id)){showToast('A category with this name already exists.');return}
+ if(id){const old=categories.find(c=>c.id===id);if(old&&old.name!==name)foods.forEach(f=>{if(f.category===old.name)f.category=name});categories=categories.map(c=>c.id===id?{...c,name,icon,status}:c);showToast('Category updated.')}
+ else{categories.push({id:nextCategoryId++,name,icon,status});showToast('Category added.')}
+ resetCategoryForm();renderAllAdmin();renderCategories();
+});
+function renderFoodCategorySelect(selected=''){const s=document.getElementById('foodCategory');if(!s)return;const active=categories.filter(c=>c.status==='Active');s.innerHTML='<option value="">Select category</option>'+active.map(c=>`<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('');if(selected)s.value=selected}
+function renderFoodTable(){document.getElementById('adminFoodTable').innerHTML=foods.map(f=>`<tr><td>${escapeHtml(f.name)}</td><td>${escapeHtml(f.category)}</td><td>${money(f.price)}</td><td><span class="status" style="${f.status==='Inactive'?'background:#eef0f3;color:#667085':''}">${f.status}</span></td><td><button class="small-btn edit-btn" onclick="editFood(${f.id})">Edit</button> <button class="small-btn delete-btn" onclick="deleteFood(${f.id})">Delete</button></td></tr>`).join('')||'<tr><td colspan="5">No menu items added yet.</td></tr>'}
+function renderAllAdmin(){renderCategoryTable();renderFoodTable();renderFoodCategorySelect()}
+function openFoodForm(){if(!categories.some(c=>c.status==='Active')){showToast('Add an active category before adding food.');return}document.getElementById('foodForm').style.display='block';document.getElementById('foodForm').reset();document.getElementById('editFoodId').value='';document.getElementById('foodFormTitle').textContent='Add Food Item';renderFoodCategorySelect();document.getElementById('foodManager').scrollIntoView({behavior:'smooth'})}
+function closeFoodForm(){document.getElementById('foodForm').style.display='none';document.getElementById('foodForm').reset()}
+function editFood(id){const f=foods.find(x=>x.id===id);if(!f)return;document.getElementById('foodForm').style.display='block';document.getElementById('foodFormTitle').textContent='Edit Food Item';document.getElementById('editFoodId').value=f.id;document.getElementById('foodName').value=f.name;renderFoodCategorySelect(f.category);document.getElementById('foodPrice').value=f.price;document.getElementById('foodImage').value=f.image||'';document.getElementById('foodStatus').value=f.status;document.getElementById('foodManager').scrollIntoView({behavior:'smooth'})}
+function deleteFood(id){const f=foods.find(x=>x.id===id);if(!f||!confirm('Delete "'+f.name+'"?'))return;foods=foods.filter(x=>x.id!==id);delete cart[id];renderAllAdmin();renderCategories();renderCart();showToast('Food item deleted.')}
+document.getElementById('foodForm').addEventListener('submit',e=>{
+ e.preventDefault();const id=Number(document.getElementById('editFoodId').value);const name=document.getElementById('foodName').value.trim();const category=document.getElementById('foodCategory').value;const price=Number(document.getElementById('foodPrice').value);const image=document.getElementById('foodImage').value.trim();const status=document.getElementById('foodStatus').value;
+ if(!name||!category||price<=0){showToast('Please enter a name, category, and valid price.');return}
+ if(id){const old=foods.find(f=>f.id===id);foods=foods.map(f=>f.id===id?{...f,name,category,price,image:image||f.image,status}:f);if(cart[id]){cart[id].name=name;cart[id].price=price}showToast('Food item updated.')}
+ else{foods.push({id:nextFoodId++,name,category,price,image:image||'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=600&q=80',status});showToast('Food item added to menu.')}
+ closeFoodForm();renderAllAdmin();renderCategories();renderCart();
+});
+document.getElementById('menuToggle').addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));
+document.querySelectorAll('#navLinks a').forEach(a=>a.addEventListener('click',()=>document.getElementById('navLinks').classList.remove('open')));
+document.getElementById('emptyModal').addEventListener('click',e=>{if(e.target.id==='emptyModal')closeEmptyModal()});
+function init(){renderCategories();renderCart();renderAllAdmin()}
+init();
+</script>
+</body>
+</html>
