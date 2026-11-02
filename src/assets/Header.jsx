@@ -12,6 +12,6 @@ export default function Header() {
     </nav>
     <button class="cart-nav" onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">🛒 My Order (<span id="cartCount">0</span>)</button>
   </div>
-  </div>
+  </div> 
   )
 }
