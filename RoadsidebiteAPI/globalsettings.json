@@ -1,0 +1,42 @@
+{
+  "ConnectionString": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=FoodApplication;Integrated Security=false;",
+  //"ConnectionString": "Data Source=10.1.0.16;Initial Catalog=DpeDB;Integrated Security=false;User ID=score;Password=@r0I3z6Mw8zj135;TrustServerCertificate=True;",
+  "DataProvider": "Microsoft.Data.SqlClient"
+
+  //"SAPAPIENDPOINT": "https://cwcsubaccount-cktsnj8u.it-cpi002-rt.cfapps.ap10.hana.ondemand.com/http/CWC/BillsPosting- ",
+  //"SAPUid": "sb-d14db2f9-5082-40be-a30f-692ccdc263f8!b69060|it-rt-cwcsubaccount-cktsnj8u!b80",
+  //"SAPPwd": "cddd3788-ffc7-4cba-b936-b6535134fe55$s67cbq42yWnH_S5bQtWTqkniaxxQBqWpoz04GTHu_9E=",
+
+  //"RECSAPAPIENDPOINT": "https://cwcsubaccount-cktsnj8u.it-cpi002-rt.cfapps.ap10.hana.ondemand.com/http/cwc/sap/customer_receipt- ",
+  //"RECSAPUid": "sb-d14db2f9-5082-40be-a30f-692ccdc263f8!b69060|it-rt-cwcsubaccount-cktsnj8u!b80",
+  //"RECSAPPwd": "cddd3788-ffc7-4cba-b936-b6535134fe55$s67cbq42yWnH_S5bQtWTqkniaxxQBqWpoz04GTHu_9E=",
+
+  //"ADJSAPAPIENDPOINT": "https://cwcsubaccount-cktsnj8u.it-cpi002-rt.cfapps.ap10.hana.ondemand.com/http/sap/fi/specialGL- ",
+  //"ADJSAPUid": "sb-d14db2f9-5082-40be-a30f-692ccdc263f8!b69060|it-rt-cwcsubaccount-cktsnj8u!b80",
+  //"ADJSAPPwd": "cddd3788-ffc7-4cba-b936-b6535134fe55$s67cbq42yWnH_S5bQtWTqkniaxxQBqWpoz04GTHu_9E=",
+
+  //"REVSAPAPIENDPOINT": "https://cwcsubaccount-cktsnj8u.it-cpi002-rt.cfapps.ap10.hana.ondemand.com/http/FI/DocumentReversal- ",
+  //"REVSAPUid": "sb-d14db2f9-5082-40be-a30f-692ccdc263f8!b69060|it-rt-cwcsubaccount-cktsnj8u!b80",
+  //"REVSAPPwd": "cddd3788-ffc7-4cba-b936-b6535134fe55$s67cbq42yWnH_S5bQtWTqkniaxxQBqWpoz04GTHu_9E=",
+
+  //"RFIDENDPOINT": "https://chnport.ibtrack.in/ChennaiApiService- ",
+  //"CFSID": "902",
+  //"RFIDSECRETKEY": "1ab6db2fe191512a1e5ad72c0",
+
+  //"Environment": "T",
+  //"CookiesAuthentnication": "N",
+
+  //"CCAVNWorkingKey": "F52847EDA0C715911416D9054623BB3E",
+  //"CCAVNAccessCode": "AVXH61IL68AO51HXOA",
+  //"CCAVNWorkingKeyBqr": "F52847EDA0C715911416D9054623BB3E",
+  //"CCAVNAccessCodeBqr": "AVXH61IL68AO51HXOA",
+  //"BranchName": "DPE",
+  //"SAPJSONPATH": "D:/SAPJSON/",
+  //"Dpe_ReportfileCIMSF": "D:/MessageExchangeFilesDpe/SCMTR/CIMSF/",
+  //"DscApiUrl": "http://localhost:8080/nCodeJSONSignWS/SignJsonFile",
+  //"InJsonFile": "D:/MessageExchangeFilesDpe/SCMTR/CIMASR/",
+  //"ArchiveInJsonFilePath": "D:/MessageExchangeFilesDpe/SCMTR/ArchiveInJson",
+  //"OUTJsonFile": "D:/MessageExchangeFilesDpe/SCMTR/CIMSFSigned/",
+  //"DSCPATH": "D:/SOFTWARE/CSRResponseDS01/ServerCertificateExport.pfx",
+  //"DSCPASSWORD": "cwc@123"
+}
