@@ -263,6 +263,12 @@ a {
   gap: 24px;
   align-items: start;
 }
+/* .categories-container {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+} */
 
 .category-pills {
   display: flex;
@@ -272,21 +278,37 @@ a {
 }
 
 .category-pill {
-  border: 0;
-  background: #f0f2f5;
-  padding: 9px 16px;
-  border-radius: 22px;
-  font-size: 13px;
-  font-weight: 750;
-  color: #3e434b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 22px; /* Makes it a pill shape */
+    border: 1px solid #e0e0e0;
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: 750;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.category-pill.active,
+.category-pill.active {
+    background-color: #e63946; /* Red color */
+    color: white;
+    border-color: #e63946;
+}
+/* Only targets the active red button when hovered */
 .category-pill:hover {
-  background: var(--red);
-  color: white;
+    background-color: #e63946;
+    color: white;
+   
 }
-
+.category-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+    border-radius: 50%;
+}
 .food-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

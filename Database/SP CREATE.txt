@@ -1,0 +1,32 @@
+create procedure [dbo].[GetallFoodCatagories]
+@In_Catid int=0
+as
+begin
+if(isnull(@In_Catid,0)=0)
+begin
+ SELECT
+        CategoryID,
+        CategoryName,
+        ImagePath
+    FROM FoodCategory
+    ORDER BY CategoryName;
+end
+end
+go
+
+creaTE procedure [dbo].[GetallFooditems]
+@In_Catid int=0
+as
+begin
+if(isnull(@In_Catid,0)=0)
+begin
+select FoodId,CategoryId, FoodName, isnull(Description,'')Description, Price, isnull(ImagePath,'')ImagePath
+from FoodItems where IsAvailable=1
+end
+else
+begin
+select FoodId,CategoryId, FoodName, isnull(Description,'')Description, Price, isnull(ImagePath,'')ImagePath
+from FoodItems where CategoryId=@In_Catid and  IsAvailable=1
+end
+end
+GO

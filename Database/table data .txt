@@ -1,0 +1,61 @@
+food catagory
+CategoryId	CategoryName	Description	ImagePath	IsActive	CreatedOn	UpdatedOn
+1	Burger		/images/Catagory/buerger_image.png	1	NULL	NULL
+2	Pizza		/images/Catagory/pizza_png.png	1	NULL	NULL
+3	Sandwitch		/images/Catagory/sandwitch_png.png	1	NULL	NULL
+4	Snacks		/images/Catagory/Snaks_image_catagory.jpg	1	NULL	NULL
+5	Desserts		/images/Catagory/dessert_png.png	1	NULL	NULL
+
+food items
+FoodId	CategoryId	FoodName	Description	Price	ImagePath	IsAvailable	CreatedOn	UpdatedOn
+1	1	Chicken Burger	Fresh chicken burger	120.00	NULL	1	2026-11-06 16:41:52.857	NULL
+2	1	Veg Burger	Fresh vegetable burger	80.00	NULL	1	2026-11-06 16:41:52.857	NULL
+3	1	Cheese Burger	Double cheese chicken burger	140.00	NULL	1	2026-11-06 16:41:52.857	NULL
+4	1	Paneer Burger	Grilled paneer tikka burger	110.00	NULL	1	2026-11-06 16:41:52.857	NULL
+5	1	Fish Burger	Crispy fish fillet burger	150.00	NULL	1	2026-11-06 16:41:52.857	NULL
+6	2	Cheese Pizza	Cheese-loaded pizza	180.00	NULL	1	2026-11-06 16:41:52.857	NULL
+7	2	Margherita Pizza	Classic margherita with basil	200.00	NULL	1	2026-11-06 16:41:52.857	NULL
+8	2	Pepperoni Pizza	Spicy pepperoni pizza	250.00	NULL	1	2026-11-06 16:41:52.857	NULL
+9	2	Veggie Supreme Pizza	Loaded with fresh vegetables	220.00	NULL	1	2026-11-06 16:41:52.857	NULL
+10	2	Paneer Tikka Pizza	Indian style paneer tikka pizza	230.00	NULL	1	2026-11-06 16:41:52.857	NULL
+11	3	Veg Sandwich	Fresh vegetable sandwich	70.00	NULL	1	2026-11-06 16:41:52.857	NULL
+12	3	Grilled Cheese Sandwich	Toasted cheese sandwich	90.00	NULL	1	2026-11-06 16:41:52.857	NULL
+13	3	Chicken Club Sandwich	Triple decker chicken sandwich	130.00	NULL	1	2026-11-06 16:41:52.857	NULL
+14	3	Paneer Tikka Sandwich	Spiced paneer sandwich	100.00	NULL	1	2026-11-06 16:41:52.857	NULL
+15	3	Egg Sandwich	Boiled egg sandwich with mayo	85.00	NULL	1	2026-11-06 16:41:52.857	NULL
+16	4	Egg Roll	Egg roll with onion	60.00	NULL	1	2026-11-06 16:41:52.857	NULL
+17	4	Chicken Roll	Spicy chicken roll	90.00	NULL	1	2026-11-06 16:41:52.857	NULL
+18	4	Paneer Roll	Paneer tikka roll	80.00	NULL	1	2026-11-06 16:41:52.857	NULL
+19	4	Veg Spring Roll	Crispy vegetable spring roll	70.00	NULL	1	2026-11-06 16:41:52.857	NULL
+20	4	Fish Roll	Crispy fish finger roll	100.00	NULL	1	2026-11-06 16:41:52.857	NULL
+21	5	Chicken Momos	Steamed chicken momos	100.00	NULL	1	2026-11-06 16:41:52.857	NULL
+22	5	Veg Momos	Steamed vegetable momos	70.00	NULL	1	2026-11-06 16:41:52.857	NULL
+23	5	Paneer Momos	Steamed paneer momos	90.00	NULL	1	2026-11-06 16:41:52.857	NULL
+24	5	Fried Chicken Momos	Deep fried chicken momos	120.00	NULL	1	2026-11-06 16:41:52.857	NULL
+25	5	Tandoori Momos	Tandoori style chicken momos	130.00	NULL	1	2026-11-06 16:41:52.857	NULL
+26	6	Cold Coffee	Chilled cold coffee	80.00	NULL	1	2026-11-06 16:41:52.857	NULL
+27	6	Hot Coffee	Fresh brewed hot coffee	60.00	NULL	1	2026-11-06 16:41:52.857	NULL
+28	6	Masala Tea	Indian masala chai	30.00	NULL	1	2026-11-06 16:41:52.857	NULL
+29	6	Fresh Lime Soda	Sweet and salty lime soda	50.00	NULL	1	2026-11-06 16:41:52.857	NULL
+30	6	Mango Shake	Fresh mango milkshake	90.00	NULL	1	2026-11-06 16:41:52.857	NULL
+31	6	Chocolate Shake	Rich chocolate milkshake	100.00	NULL	1	2026-11-06 16:41:52.857	NULL
+32	7	Veg Fried Rice	Chinese style fried rice	120.00	NULL	1	2026-11-06 16:41:52.857	NULL
+33	7	Chicken Fried Rice	Chicken fried rice	150.00	NULL	1	2026-11-06 16:41:52.857	NULL
+34	7	Veg Hakka Noodles	Stir fried hakka noodles	110.00	NULL	1	2026-11-06 16:41:52.857	NULL
+35	7	Chicken Chowmein	Chicken chowmein	140.00	NULL	1	2026-11-06 16:41:52.857	NULL
+36	7	Chilli Chicken	Spicy chilli chicken dry	180.00	NULL	1	2026-11-06 16:41:52.857	NULL
+37	8	Masala Dosa	Crispy dosa with potato filling	80.00	NULL	1	2026-11-06 16:41:52.857	NULL
+38	8	Plain Dosa	Crispy plain dosa	60.00	NULL	1	2026-11-06 16:41:52.857	NULL
+39	8	Idli Sambar	Steamed idli with sambar	50.00	NULL	1	2026-11-06 16:41:52.857	NULL
+40	8	Medu Vada	Crispy lentil vadas	45.00	NULL	1	2026-11-06 16:41:52.857	NULL
+41	8	Uttapam	Onion uttapam	70.00	NULL	1	2026-11-06 16:41:52.857	NULL
+42	9	Chocolate Brownie	Fudgy chocolate brownie	90.00	NULL	1	2026-11-06 16:41:52.857	NULL
+43	9	Gulab Jamun	Sweet gulab jamun (2 pcs)	50.00	NULL	1	2026-11-06 16:41:52.857	NULL
+44	9	Ice Cream Sundae	Vanilla ice cream with toppings	110.00	NULL	1	2026-11-06 16:41:52.857	NULL
+45	9	Rasmalai	Soft rasmalai (2 pcs)	70.00	NULL	1	2026-11-06 16:41:52.857	NULL
+46	9	Choco Lava Cake	Molten chocolate lava cake	120.00	NULL	1	2026-11-06 16:41:52.857	NULL
+47	10	Chicken Biryani	Hyderabadi chicken biryani	220.00	NULL	1	2026-11-06 16:41:52.857	NULL
+48	10	Veg Biryani	Aromatic vegetable biryani	170.00	NULL	1	2026-11-06 16:41:52.857	NULL
+49	10	Mutton Biryani	Slow cooked mutton biryani	280.00	NULL	1	2026-11-06 16:41:52.857	NULL
+50	10	Egg Biryani	Biryani with boiled eggs	180.00	NULL	1	2026-11-06 16:41:52.857	NULL
+51	10	Aloo Biriyani		90.00		1	2026-11-06 16:43:09.723	NULL

@@ -1,11 +1,14 @@
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './Food.css';
 export default function Food() {
 
   const [paymentMethod, setPaymentMethod] = useState("UPI");
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [tokenNo, setTokenNo] = useState("");
+  const [categories, setCategories] = useState([]);
+const [activeCategoryId, setActiveCategoryId] = useState(0);
+   const [foodItems, setFoodItems] = useState([]);
 
   // Scroll to payment section
   const goToPayment = () => {
@@ -17,11 +20,40 @@ export default function Food() {
   // Place demo order
   const placeOrder = () => {
     const token = "RB-" + Math.floor(1000 + Math.random() * 9000);
-
     setTokenNo(token);
     setOrderPlaced(true);
   };
-
+  useEffect(() => {
+    Getallfoodcategories();
+     GetFoodItems(0);
+}, []);
+/**---------------------- food catagory-------------------- */
+const Getallfoodcategories = async () => {
+    try {     
+        const response = await fetch(
+            "https://localhost:44326/api/Food/Getallfoodcaragories"
+        ); 
+        const result = await response.json();   
+            setCategories(result.data || []);
+       
+    }
+    catch (error) {
+        console.error("Error fetching food categories:", error);
+    }
+};
+/**--------------------------------------- */
+/*------------------------get food item--------------- */
+const GetFoodItems= async(cartagoryId)=>{
+try{
+    const response = await fetch(`https://localhost:44326/api/Food/Getfooditem/${categoryId}`);
+    const result = await response.json();   
+    console.log("fooditems-",result.data)
+    setFoodItems(result.data || []);
+  }
+  catch(error){
+      console.error("Error fetching food items:", error);
+  }
+}
   return (
     <div>
 
@@ -74,15 +106,24 @@ export default function Food() {
         <section className="section container" id="menu">
 
           <h2 className="section-heading">🍴 Our Menu</h2>
-
           <div className="order-layout">
 
             <div>
-              <div
-                className="category-pills"
-                id="categoryPills"
-                aria-label="Food categories"
-              ></div>
+              {/* Food Categories */}
+              <div  className="category-pills" id="categoryPills" aria-label="Food categories">
+                {/* All Category */}
+                 <button type="button" className={`category-pill ${activeCategoryId === 0 ? "active" : ""}`} onClick={() => handleCategoryClick(0)}>
+                    🍽️ All
+                </button>
+                  {/* Dynamic Categories */}
+                   {categories.map((cat) => (
+                    <button type="button" key={cat.categoryId} 
+                        className={`category-pill ${activeCategoryId  === cat.categoryId  ? "active" : ""}`}
+                        onClick={() => handleCategoryClick(cat.categoryId)}>
+                        {cat.imagePath ? (<img src={cat.imagePath}  alt=""  className="category-icon"/>) : ("🍴")}{cat.categoryName}
+                    </button>
+                ))}
+              </div>
 
               <div className="food-grid" id="foodGrid"></div>
 
