@@ -2,5 +2,6 @@
   <Project Path="../Common/Common.csproj" />
   <Project Path="../CommonModels/CommonModels.csproj" />
   <Project Path="../DataManager/DataManager.csproj" />
+  <Project Path="../Repositories/Repositories.csproj" />
   <Project Path="RoadsidebiteAPI.csproj" />
 </Solution>

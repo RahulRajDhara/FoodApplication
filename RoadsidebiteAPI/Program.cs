@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 var logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     //.Enrich.FromLogContext()
-    .Enrich.WithProperty("Application", "Studentresult")
+    .Enrich.WithProperty("Application", "Roadsidebite")
     .CreateLogger();
 
 builder.Logging.ClearProviders();
@@ -38,7 +38,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseRouting();
+app.UseCors("DynamicCors");
 app.UseAuthorization();
 
 app.MapControllers();
