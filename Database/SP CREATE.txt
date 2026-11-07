@@ -14,19 +14,22 @@ end
 end
 go
 
-creaTE procedure [dbo].[GetallFooditems]
+CREATE procedure [dbo].[GetallFooditems]
 @In_Catid int=0
 as
 begin
 if(isnull(@In_Catid,0)=0)
 begin
-select FoodId,CategoryId, FoodName, isnull(Description,'')Description, Price, isnull(ImagePath,'')ImagePath
-from FoodItems where IsAvailable=1
+select FI.FoodId,FI.CategoryId,FC.CategoryName, FI.FoodName, isnull(FI.Description,'')Description, FI.Price, isnull(FI.ImagePath,'')ImagePath
+from FoodItems FI
+INNER JOIN FoodCategory FC ON FC.CategoryId=FI.CategoryId
+where IsAvailable=1
 end
 else
 begin
-select FoodId,CategoryId, FoodName, isnull(Description,'')Description, Price, isnull(ImagePath,'')ImagePath
-from FoodItems where CategoryId=@In_Catid and  IsAvailable=1
+select FI.FoodId,FI.CategoryId,FC.CategoryName, FI.FoodName, isnull(FI.Description,'')Description, FI.Price, isnull(FI.ImagePath,'')ImagePath
+from FoodItems FI
+INNER JOIN FoodCategory FC ON FC.CategoryId=FI.CategoryId
+where FI.CategoryId=@In_Catid and  FI.IsAvailable=1
 end
 end
-GO
