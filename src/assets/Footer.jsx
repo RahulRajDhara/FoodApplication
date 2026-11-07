@@ -36,14 +36,14 @@ export default function Footer() {
           
           <div>
             <h4>Contact Us</h4>
-            <p>📍 Your Road, Your City</p>
-            <p>☎ +91 98765 43210</p>
+            <p>📍 Kona, Howrah</p>
+            <p>☎ +91 79807 71109</p>
             <p>Open daily · 10 AM – 10 PM</p>
           </div>
         </div>
         
         <div className="footer-bottom">
-          © 2026 Roadside Bites. All rights reserved. · Demo prototype
+          © 2026 Roadside Bites. All rights reserved. · Created By Rahul
         </div>
       </div>
     </footer>

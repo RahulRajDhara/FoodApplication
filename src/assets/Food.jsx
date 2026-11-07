@@ -9,6 +9,7 @@ export default function Food() {
   const [categories, setCategories] = useState([]);
 const [activeCategoryId, setActiveCategoryId] = useState(0);
    const [foodItems, setFoodItems] = useState([]);
+   
 
   // Scroll to payment section
   const goToPayment = () => {
