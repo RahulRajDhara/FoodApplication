@@ -322,6 +322,7 @@ a {
   background: white;
   box-shadow: 0 3px 10px #00000008;
   transition: 0.2s;
+
 }
 
 .food-card:hover {
@@ -342,8 +343,10 @@ a {
 }
 
 .food-info h3 {
-  font-size: 10px;
+  font-size: 14px;
   margin: 0 0 4px;
+
+  
 }
 
 .food-meta {

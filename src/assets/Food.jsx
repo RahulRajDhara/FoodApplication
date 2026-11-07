@@ -144,13 +144,13 @@ const handleCategoryClick = (id) => {
         {
           foodItems.length > 0 ? (  // <--- 1. ADDED THE '?' HERE
             foodItems.map((item) => (
-          <div className="food-card" key={item.itemId}>
+          <div className="food-card" key={item.foodID}>
             {/* 1. The Food Image */}
             <img src={item.imageURL} alt={item.name} className="food-image" />
             
             {/* 2. Text Details */}
             <div className="food-info">
-                <h5>{item.name}</h5>
+                <h3 className="">{item.name}</h3>
                 <p className="food-desc">{item.description}</p>
                 
                 {/* 3. Price and Add to Cart */}
@@ -158,8 +158,8 @@ const handleCategoryClick = (id) => {
                     <span className="price">₹{item.price}</span>
                      <span className="food-tag">{item.categoryName}</span>
                   </div>
-                    <button  className="add-btn" onClick={() => console.log("Added to cart:", item.name)}>
-                     ＋ Add to Order
+                    <button  className="add-btn" onClick={() => addToCart(item.foodID)}>
+                    ＋ Add to Order
                     </button>
                     {/* 2. MOVED THE COMMENT OUTSIDE THE BUTTON TAG OR DELETED IT */}
                 
