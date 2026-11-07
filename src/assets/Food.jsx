@@ -43,17 +43,32 @@ const Getallfoodcategories = async () => {
 };
 /**--------------------------------------- */
 /*------------------------get food item--------------- */
-const GetFoodItems= async(cartagoryId)=>{
+const GetFoodItems= async(categoryId)=>{
 try{
-    const response = await fetch(`https://localhost:44326/api/Food/Getfooditem/${categoryId}`);
+  console.log("FoodItems API Start");
+        console.log("Selected CategoryId:", categoryId);
+    const response = await fetch(
+      `https://localhost:44326/api/Food/Getfooditem?Categoyid=${categoryId}`,
+      {
+       method:"GET",
+        headers:{
+          "Content-Type":"application/json"
+        }       
+    }
+    );
     const result = await response.json();   
     console.log("fooditems-",result.data)
     setFoodItems(result.data || []);
   }
   catch(error){
-      console.error("Error fetching food items:", error);
+       console.error("Error fetching food items:", error);
   }
-}
+};
+/*-------------------------------------------------------------- */
+const handleCategoryClick = (id) => {
+        setActiveCategoryId(id); // Updates the red button
+        GetFoodItems(id);        // Fetches new items from DB
+    };
   return (
     <div>
 
@@ -125,7 +140,40 @@ try{
                 ))}
               </div>
 
-              <div className="food-grid" id="foodGrid"></div>
+             <div className="food-grid" id="foodGrid">
+        {
+          foodItems.length > 0 ? (  // <--- 1. ADDED THE '?' HERE
+            foodItems.map((item) => (
+          <div className="food-card" key={item.itemId}>
+            {/* 1. The Food Image */}
+            <img src={item.imageURL} alt={item.name} className="food-image" />
+            
+            {/* 2. Text Details */}
+            <div className="food-info">
+                <h5>{item.name}</h5>
+                <p className="food-desc">{item.description}</p>
+                
+                {/* 3. Price and Add to Cart */}
+                <div className="food-meta">
+                    <span className="price">₹{item.price}</span>
+                     <span className="food-tag">{item.categoryName}</span>
+                  </div>
+                    <button  className="add-btn" onClick={() => console.log("Added to cart:", item.name)}>
+                     ＋ Add to Order
+                    </button>
+                    {/* 2. MOVED THE COMMENT OUTSIDE THE BUTTON TAG OR DELETED IT */}
+                
+            </div>
+          </div>
+      ))
+       ) : (  // <--- This colon is correct
+          /* This shows if the category has no items, or while loading */
+              <div className="no-items">
+              <p>No items found in this category. 🍽️</p>
+            </div>
+           ) 
+        }
+</div>
 
               <div className="promo">
                 <h2>
