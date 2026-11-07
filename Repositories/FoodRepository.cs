@@ -76,6 +76,7 @@ namespace Repositories
                         {
                             FoodID = Convert.ToInt32(dt.Rows[i]["FoodId"]),
                             CategoryID = Convert.ToInt32(dt.Rows[i]["CategoryId"]),
+                            CategoryName = Convert.ToString(dt.Rows[i]["CategoryName"]),
                             FoodName = Convert.ToString(dt.Rows[i]["FoodName"]),
                             Description = Convert.ToString(dt.Rows[i]["Description"]),
                             Price = Convert.ToDecimal(dt.Rows[i]["Price"]),
