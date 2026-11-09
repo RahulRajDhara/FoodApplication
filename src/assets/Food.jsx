@@ -1,29 +1,21 @@
 
 import React, { useState,useEffect } from 'react';
 import './Food.css';
+import FooddescModal from "./FooddescModal.jsx";
 export default function Food() {
 
-  const [paymentMethod, setPaymentMethod] = useState("UPI");
-  const [orderPlaced, setOrderPlaced] = useState(false);
-  const [tokenNo, setTokenNo] = useState("");
+ 
+
   const [categories, setCategories] = useState([]);
 const [activeCategoryId, setActiveCategoryId] = useState(0);
    const [foodItems, setFoodItems] = useState([]);
-   
-
-  // Scroll to payment section
-  const goToPayment = () => {
-    document.getElementById("payment").scrollIntoView({
-      behavior: "smooth"
-    });
-  };
-
-  // Place demo order
-  const placeOrder = () => {
-    const token = "RB-" + Math.floor(1000 + Math.random() * 9000);
-    setTokenNo(token);
-    setOrderPlaced(true);
-  };
+   const [cart, setCart] = useState({});
+   const [selectedFood, setSelectedFood] = useState(null); // Tracks the item for the modal
+    const goToPayment = () => {
+           document.getElementById("payment").scrollIntoView({
+             behavior: "smooth"
+           });
+         };
   useEffect(() => {
     Getallfoodcategories();
      GetFoodItems(0);
@@ -46,8 +38,7 @@ const Getallfoodcategories = async () => {
 /*------------------------get food item--------------- */
 const GetFoodItems= async(categoryId)=>{
 try{
-  console.log("FoodItems API Start");
-        console.log("Selected CategoryId:", categoryId);
+ 
     const response = await fetch(
       `https://localhost:44326/api/Food/Getfooditem?Categoyid=${categoryId}`,
       {
@@ -58,7 +49,7 @@ try{
     }
     );
     const result = await response.json();   
-    console.log("fooditems-",result.data)
+   
     setFoodItems(result.data || []);
   }
   catch(error){
@@ -70,6 +61,57 @@ const handleCategoryClick = (id) => {
         setActiveCategoryId(id); // Updates the red button
         GetFoodItems(id);        // Fetches new items from DB
     };
+    /*---------------------Add to cart---------------------- */
+    const cartItems = Object.values(cart);
+const cartCount = cartItems.reduce((sum, item) => sum + item.qty, 0);
+const cartTotal = cartItems.reduce((sum, item) => sum + (Number(item.price) * item.qty), 0);
+
+    function addToCart(item){
+      
+      setCart((prevCart)=>{
+         const existingItem =prevCart[item.foodID];
+         if(existingItem){
+          return {
+          ...prevCart,
+          [item.foodID]: { ...existingItem, qty: existingItem.qty + 1 }
+          };
+         }
+         else{
+          return {
+                ...prevCart,
+               [item.foodID]: { ...item, qty: 1 }
+                };
+         }
+      })
+    }
+
+    function changeqty(id,delta){ 
+     
+      setCart((prevCart)=>{
+        const item=prevCart[id];
+        if(!item)
+          return prevCart;
+
+        const newQty=item.qty+delta;
+        if(newQty<=0){
+          const newCart={ ...prevCart};
+          delete newCart[id];
+          return newCart;
+        }
+        return{
+          ...prevCart,
+          [id]:{...item,qty:newQty}
+        }
+
+      })
+    }
+    function removeFromCart(id) {
+  setCart((prevCart) => {
+    const newCart = { ...prevCart };
+    delete newCart[id];
+    return newCart;
+  });
+}
   return (
     <div>
 
@@ -142,27 +184,31 @@ const handleCategoryClick = (id) => {
               </div>
 
              <div className="food-grid" id="foodGrid">
-        {
+             {
           foodItems.length > 0 ? (  // <--- 1. ADDED THE '?' HERE
             foodItems.map((item) => (
           <div className="food-card" key={item.foodID}>
             {/* 1. The Food Image */}
-            <img src={item.imageURL} alt={item.name} className="food-image" />
+            <img src={item.imageURL} alt={item.foodName} className="food-image" />
             
             {/* 2. Text Details */}
             <div className="food-info">
-                <h3 className="">{item.name}</h3>
-                <p className="food-desc">{item.description}</p>
-                
+                <h4 className="">{item.foodName}</h4>
+                {/* <p className="food-desc">{item.description}</p> */}
+                    <span className="details-btn" onClick={() => 
+                    {
+                       console.log("Details clicked:", item);
+                      setSelectedFood(item)
+                      }}>Details</span>
                 {/* 3. Price and Add to Cart */}
                 <div className="food-meta">
                     <span className="price">₹{item.price}</span>
                      <span className="food-tag">{item.categoryName}</span>
                   </div>
-                    <button  className="add-btn" onClick={() => addToCart(item.foodID)}>
+                    <button  className="add-btn" onClick={() => addToCart(item)}>
                     ＋ Add to Order
                     </button>
-                    {/* 2. MOVED THE COMMENT OUTSIDE THE BUTTON TAG OR DELETED IT */}
+                 
                 
             </div>
           </div>
@@ -175,7 +221,16 @@ const handleCategoryClick = (id) => {
            ) 
         }
 </div>
-
+{/*------------------------- MODAL OVERLAY ---------------------*/}
+{/* MODAL OVERLAY */}
+    <FooddescModal
+  selectedFood={selectedFood}
+  cart={cart}
+  onClose={() => setSelectedFood(null)}
+  onAddToCart={addToCart}
+  onChangeQty={changeqty}
+/>
+{/*----------------------- end -----------------------------------------*/}
               <div className="promo">
                 <h2>
                   Tasty Food<br />
@@ -193,26 +248,46 @@ const handleCategoryClick = (id) => {
             {/* Cart */}
             <aside className="cart-panel" id="order">
 
-              <div className="cart-title">🛒 Your Order</div>
+              <div className="cart-title">🛒 Your Order({cartCount})</div>
 
               <div className="cart-body">
-
+              {/* RENDER CART ITEMS HERE */}
                 <div id="cartItems">
+                {cartItems.length === 0 ? (
                   <div className="cart-empty">
                     Your cart is empty.<br />
                     Choose something delicious!
                   </div>
-                </div>
-
+                  ) : (
+            cartItems.map((x) => (
+              
+          <div className="cart-item" key={x.foodID}>
+            <div>
+              <div className="cart-item-name">{x.foodName}</div>
+              <div className="cart-item-sub">₹{x.price} each</div>  
+              <div className="cart-controls">
+                <button className="qty-btn" onClick={() => changeqty(x.foodID, -1)}>−</button>
+                <span className="qty">{x.qty}</span>
+                <button className="qty-btn" onClick={() => changeqty(x.foodID, 1)}>+</button>
+                <button className="remove-btn" onClick={() => removeFromCart(x.foodID)}>🗑</button>
+              </div>
+            </div>
+            <div className="cart-line-total">₹{x.price * x.qty}</div>
+          </div>
+        ))
+      )}
+    </div>
                 <div className="cart-total">
                   <span>Total Amount</span>
-                  <strong id="cartTotal">₹0</strong>
+                  <strong id="cartTotal">₹{cartTotal}</strong>
                 </div>
 
                 <button
                   className="btn btn-red"
                   id="proceedBtn"
-                  onClick={goToPayment}
+                   onClick={goToPayment}
+                 disabled={cartItems.length === 0}
+
                 >
                   ▣ Proceed to Payment →
                 </button>
@@ -268,134 +343,7 @@ const handleCategoryClick = (id) => {
           </div>
         </section>
 
-        {/* Payment */}
-        <section className="payment-section section" id="payment">
-
-          <div className="container">
-
-            <h2 className="section-heading">💳 Payment Method</h2>
-
-            <div className="payment-options">
-
-              <label className="payment-option">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="UPI"
-                  checked={paymentMethod === "UPI"}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                />
-
-                <span className="pay-icon">📲</span>
-
-                <span>
-                  <strong>UPI</strong>
-                  <small>Google Pay, PhonePe, Paytm</small>
-                </span>
-              </label>
-
-              <label className="payment-option">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="Card"
-                  checked={paymentMethod === "Card"}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                />
-
-                <span className="pay-icon">💳</span>
-
-                <span>
-                  <strong>Credit / Debit Card</strong>
-                  <small>Visa, Mastercard, RuPay</small>
-                </span>
-              </label>
-
-              <label className="payment-option">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="Cash"
-                  checked={paymentMethod === "Cash"}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                />
-
-                <span className="pay-icon">💵</span>
-
-                <span>
-                  <strong>Cash at Counter</strong>
-                  <small>Pay directly to the seller</small>
-                </span>
-              </label>
-
-            </div>
-
-            <div className="pay-bottom">
-
-              <button
-                className="btn btn-red"
-                id="payBtn"
-                onClick={placeOrder}
-              >
-                🔒 Confirm Demo Order · ₹0
-              </button>
-
-            </div>
-
-            {/* Order Token */}
-            {orderPlaced && (
-
-              <div className="token-result">
-
-                <div className="token-left">
-
-                  <div className="check-circle">✓</div>
-
-                  <div>
-                    <h3>Your Order Has Been Placed!</h3>
-
-                    <div style={{ margin: "5px 0 8px" }}>
-                      Your Token No. is
-                      <span className="token-no"> {tokenNo}</span>
-                    </div>
-
-                    <small>
-                      Please show this token to the seller to collect your food.
-                    </small>
-                  </div>
-
-                </div>
-
-                <div className="token-items">
-
-                  <h4>Order Details</h4>
-
-                  <div className="token-row">
-                    <strong>Total</strong>
-                    <strong>₹0</strong>
-                  </div>
-
-                  <div className="token-row">
-                    <span>Payment</span>
-                    <span>{paymentMethod}</span>
-                  </div>
-
-                  <button
-                    className="btn btn-outline"
-                    style={{ width: "100%", marginTop: "10px" }}
-                    onClick={() => window.print()}
-                  >
-                    🖨 Print Token
-                  </button>
-
-                </div>
-
-              </div>
-
-            )}
-
-          </div>
-        </section>
+       
 
       </main>
 

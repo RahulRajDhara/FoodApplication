@@ -1,7 +1,7 @@
 import Header from './assets/Header'
 import Food from './assets/Food'
 import Footer from './assets/Footer'
-
+import Payment from './assets/Payment'
 function App() {
 
 
@@ -9,6 +9,7 @@ function App() {
     <>
       <Header/>
       <Food/>
+      <Payment/>
       <Footer/> 
 
     </>
