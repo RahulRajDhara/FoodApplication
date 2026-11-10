@@ -36,9 +36,9 @@ export default function FooddescModal({ selectedFood, cart, onClose, onAddToCart
             {cartEntry ? (
               <div className="modal-qty-controls" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <button className="qty-btn" onClick={() => onChangeQty(selectedFood.foodID, -1)}>−</button>
-                <span className="qty">{qty}</span>
+                <span className="qty" >{qty}</span>
                 <button className="qty-btn" onClick={() => onChangeQty(selectedFood.foodID, 1)}>+</button>
-                <span className="modal-line-total" style={{ marginLeft: '10px', fontWeight: 'bold' }}>
+                <span className="modal-line-total" style={{ marginLeft: '10px', fontWeight: 'bold', color: '#e23744' }}>
                   ₹{selectedFood.price * qty}
                 </span>
               </div>

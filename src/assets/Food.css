@@ -542,9 +542,9 @@ a {
 
 .modal-close-btn {
   flex: 1;
-  background: transparent;
-  color: #666;
-  border: 1px solid #ddd;
+  background: #e23744;
+  color: white;
+  border: none;
   padding: 10px;
   border-radius: 8px;
   font-size: 16px;
@@ -554,8 +554,7 @@ a {
 }
 
 .modal-close-btn:hover {
-  background: #f5f5f5;
-  color: #333;
+   background: #c92a36;
 }
 
 /* --- Mobile Responsiveness --- */
@@ -563,6 +562,7 @@ a {
   .modal-content {
     flex-direction: column; /* Stack image on top of text */
     max-height: 90vh;
+    
   }
   
   .modal-image-container {
