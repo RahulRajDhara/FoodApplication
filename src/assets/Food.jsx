@@ -2,7 +2,7 @@
 import React, { useState,useEffect } from 'react';
 import './Food.css';
 import FooddescModal from "./FooddescModal.jsx";
-export default function Food() {
+export default function Food({ setAppCartCount }) {
 
  const APikey='https://localhost:44326/api/';
 
@@ -20,6 +20,7 @@ const [activeCategoryId, setActiveCategoryId] = useState(0);
     Getallfoodcategories();
      GetFoodItems(0);
 }, []);
+ 
 /**---------------------- food catagory-------------------- */
 const Getallfoodcategories = async () => {
     try {     
@@ -65,7 +66,10 @@ const handleCategoryClick = (id) => {
     const cartItems = Object.values(cart);
 const cartCount = cartItems.reduce((sum, item) => sum + item.qty, 0);
 const cartTotal = cartItems.reduce((sum, item) => sum + (Number(item.price) * item.qty), 0);
-
+ useEffect(() => {
+    // This sends the count up to App.jsx every time it changes
+    setAppCartCount(cartCount);
+  }, [cartCount, setAppCartCount]);
     function addToCart(item){
       
       setCart((prevCart)=>{

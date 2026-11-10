@@ -1,7 +1,7 @@
 import React from 'react'
 
 import  './Header.css';
-export default function Header() {
+export default function Header({ cartCount }) {
   return (
     <div className="topbar">
       <div className="container nav">
@@ -10,7 +10,7 @@ export default function Header() {
     <nav className="navlinks" id="navLinks">
       <a className="active" href="#home">⌂ Home</a><a href="#menu">♨ Menu</a><a href="#how">ⓘ How It Works</a><a href="#contact">☎ Contact</a>
     </nav>
-    <button className="cart-nav" onClick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">🛒 My Order (<span id="cartCount">0</span>)</button>
+    <button className="cart-nav" onClick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">🛒 My Order (<span id="cartCount">{ cartCount }</span>)</button>
   </div>
   </div> 
   )

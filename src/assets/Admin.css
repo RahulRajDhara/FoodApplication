@@ -1,0 +1,236 @@
+/* =========================================
+   ADMIN DASHBOARD STYLES
+   ========================================= */
+.admin-wrap {
+  background: #f1f5f9;
+  padding: 34px 0 45px;
+  border-top: 5px solid var(--yellow);
+}
+
+.admin-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 18px;
+}
+
+.admin-top h2 { margin: 0; font-size: 27px; }
+.admin-top p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+
+.admin-badge {
+  background: #e0eaff;
+  color: #1c55a7;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 205px minmax(0, 1fr);
+  gap: 18px;
+}
+
+.admin-sidebar {
+  background: #1b2532;
+  color: white;
+  border-radius: 12px;
+  padding: 15px;
+  height: max-content;
+}
+
+.admin-sidebar h3 { font-size: 16px; margin: 0 0 14px; }
+
+.admin-side-link {
+  display: block;
+  padding: 10px;
+  border-radius: 7px;
+  font-size: 13px;
+  color: #d8e0ea;
+  margin: 4px 0;
+}
+
+.admin-side-link.active, .admin-side-link:hover {
+  background: #1769d2;
+  color: white;
+}
+
+.admin-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.admin-card {
+  background: #fff;
+  border: 1px solid #e1e7ef;
+  border-radius: 12px;
+  padding: 17px;
+  box-shadow: 0 3px 10px #20304008;
+}
+
+.admin-card h3 { margin: 0 0 13px; font-size: 17px; }
+
+.admin-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.admin-card-head h3 { margin: 0; }
+
+.admin-table-wrap { overflow-x: auto; }
+
+/* Admin Table Styles */
+.admin-table-wrap table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+}
+
+.admin-table-wrap th, 
+.admin-table-wrap td {
+  padding: 11px 9px;
+  text-align: left;
+  border-bottom: 1px solid #e8edf3;
+  white-space: nowrap;
+}
+
+.admin-table-wrap th {
+  background: #f4f7fb;
+  color: #465365;
+  font-weight: 800;
+}
+
+.status {
+  background: #e0f6e6;
+  color: #18783a;
+  border-radius: 20px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.small-btn {
+  border: 0;
+  border-radius: 6px;
+  padding: 7px 9px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.edit-btn { background: #e6efff; color: #1755a6; }
+.delete-btn { background: #ffebeb; color: #c51b22; }
+
+/* Admin Form Styles */
+.form-group { margin-bottom: 13px; }
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d6dde7;
+  border-radius: 7px;
+  background: white;
+  outline: none;
+}
+
+.form-group input:focus, .form-group select:focus {
+  border-color: #4788ed;
+  box-shadow: 0 0 0 3px #4788ed20;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-hint {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+/* Custom Modals and Toasts (If used in Admin) */
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: #171b20;
+  color: #fff;
+  padding: 13px 18px;
+  border-radius: 10px;
+  box-shadow: 0 5px 25px #0003;
+  z-index: 50;
+  display: none;
+  max-width: 320px;
+  font-size: 13px;
+}
+
+.toast.show { display: block; }
+
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #0008;
+  z-index: 60;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.modal-backdrop.show { display: flex; }
+
+.modal {
+  background: white;
+  border-radius: 15px;
+  padding: 24px;
+  width: min(440px, 100%);
+  box-shadow: 0 20px 80px #0004;
+}
+
+.modal h2 { margin: 0 0 8px; }
+.modal p { color: var(--muted); font-size: 13px; }
+
+/* Admin Mobile Responsiveness */
+@media (max-width: 1000px) {
+  .admin-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .admin-layout { grid-template-columns: 1fr; }
+  
+  .admin-sidebar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+  }
+  
+  .admin-sidebar h3 { width: 100%; }
+  .admin-side-link { margin: 0; }
+  
+  .admin-top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  
+  .admin-top h2 { font-size: 24px; }
+}
