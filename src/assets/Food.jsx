@@ -4,7 +4,7 @@ import './Food.css';
 import FooddescModal from "./FooddescModal.jsx";
 export default function Food() {
 
- 
+ const APikey='https://localhost:44326/api/';
 
   const [categories, setCategories] = useState([]);
 const [activeCategoryId, setActiveCategoryId] = useState(0);
@@ -24,7 +24,7 @@ const [activeCategoryId, setActiveCategoryId] = useState(0);
 const Getallfoodcategories = async () => {
     try {     
         const response = await fetch(
-            "https://localhost:44326/api/Food/Getallfoodcaragories"
+            `${APikey}Food/Getallfoodcaragories`
         ); 
         const result = await response.json();   
             setCategories(result.data || []);
@@ -40,7 +40,7 @@ const GetFoodItems= async(categoryId)=>{
 try{
  
     const response = await fetch(
-      `https://localhost:44326/api/Food/Getfooditem?Categoyid=${categoryId}`,
+      `${APikey}Food/Getfooditem?Categoyid=${categoryId}`,
       {
        method:"GET",
         headers:{
