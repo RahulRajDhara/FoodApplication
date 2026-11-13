@@ -2,9 +2,10 @@
 import React, { useState,useEffect } from 'react';
 import './Food.css';
 import FooddescModal from "./FooddescModal.jsx";
+import { API_BASE_URL } from "./Config.js"
 export default function Food({ setAppCartCount }) {
 
- const APikey='https://localhost:44326/api/';
+// const APikey='https://localhost:44326/api/';
 
   const [categories, setCategories] = useState([]);
 const [activeCategoryId, setActiveCategoryId] = useState(0);
@@ -25,7 +26,7 @@ const [activeCategoryId, setActiveCategoryId] = useState(0);
 const Getallfoodcategories = async () => {
     try {     
         const response = await fetch(
-            `${APikey}Food/Getallfoodcaragories`
+            `${API_BASE_URL}Food/Getallfoodcaragories`
         ); 
         const result = await response.json();   
             setCategories(result.data || []);
@@ -41,7 +42,7 @@ const GetFoodItems= async(categoryId)=>{
 try{
  
     const response = await fetch(
-      `${APikey}Food/Getfooditem?Categoyid=${categoryId}`,
+      `${API_BASE_URL}Food/Getfooditem?Categoyid=${categoryId}`,
       {
        method:"GET",
         headers:{

@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './Admin.css'; // We will create this CSS file next
+import { API_BASE_URL } from "./Config.js"
 
 export default function Admin() {
+   
+  // 1. Store the ACTUAL FILE object here, not a base64 string
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
+    const [categories, setCategories] = useState([]);
   // --- STATE FOR CATEGORIES ---
-  const [categories, setCategories] = useState([
-    { id: 1, name: 'Burger', icon: '🍔', status: 'Active' },
-    { id: 2, name: 'Pizza', icon: '🍕', status: 'Active' },
-  ]);
-  const [catForm, setCatForm] = useState({ id: null, name: '', icon: '', status: 'Active' });
+
 
   // --- STATE FOR FOOD ITEMS ---
   const [foods, setFoods] = useState([
@@ -15,22 +17,28 @@ export default function Admin() {
   ]);
   const [foodForm, setFoodForm] = useState({ id: null, name: '', category: '', price: '', image: '', status: 'Active' });
   const [showFoodForm, setShowFoodForm] = useState(false);
-
+ const [showCatForm, setShowCatForm] = useState(false);
   // ==============================
   // CATEGORY HANDLERS
   // ==============================
-  const handleCatSubmit = (e) => {
-    e.preventDefault();
-    if (catForm.id) {
-      // Update
-      setCategories(categories.map(c => c.id === catForm.id ? catForm : c));
-    } else {
-      // Insert
-      setCategories([...categories, { ...catForm, id: Date.now() }]);
+  useEffect(() => {
+    Getallfoodcategories();    
+}, []);
+const Getallfoodcategories = async () => {
+    try {     
+        const response = await fetch(
+            `${API_BASE_URL}Food/Getallfoodcaragories`
+        ); 
+       
+        const result = await response.json();   
+         console.log(result.data)
+            setCategories(result.data || []);
+       
     }
-    setCatForm({ id: null, name: '', icon: '', status: 'Active' }); // Reset form
-  };
-
+    catch (error) {
+        console.error("Error fetching food categories:", error);
+    }
+};
   const editCategory = (cat) => setCatForm(cat);
   
   const deleteCategory = (id) => {
@@ -38,37 +46,51 @@ export default function Admin() {
       setCategories(categories.filter(c => c.id !== id));
     }
   };
+  // 1. NEW FUNCTION: Handle File Upload
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // reader.result contains the Base64 string of the image
+        setCatForm({ ...catForm, icon: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
+    const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImageFile(file); // Save the actual file for the API
+      setImagePreview(URL.createObjectURL(file)); // Create a temporary URL just to show the user
+    }
+  };
+  // ... YOUR EXISTING FORM LOGIC ...
+  const [catForm, setCatForm] = useState({ id: null, name: '', icon: '', status: 'Active' });
+  // 3. OPEN FORM FUNCTION
+  const openAddCategoryForm = () => {
+    setCatForm({ categoryId: null, categoryName: '', status: 'Active' });
+    setSelectedImageFile(null);
+    setImagePreview(null);
+    setShowCatForm(true);
+  };
+  const handleCatSubmit = (e) => {
+    e.preventDefault();
+    if (catForm.id) {
+      // Update existing
+      setCategories(categories.map(c => c.id === catForm.id ? catForm : c));
+    } else {
+      // Insert new
+      setCategories([...categories, { ...catForm, id: Date.now() }]);
+    }
+    // Reset form
+    setCatForm({ id: null, name: '', icon: '', status: 'Active' });
+  };
   // ==============================
   // FOOD HANDLERS
   // ==============================
-  const handleFoodSubmit = (e) => {
-    e.preventDefault();
-    const foodData = { ...foodForm, price: Number(foodForm.price) };
-    
-    if (foodForm.id) {
-      // Update
-      setFoods(foods.map(f => f.id === foodForm.id ? foodData : f));
-    } else {
-      // Insert
-      setFoods([...foods, { ...foodData, id: Date.now() }]);
-    }
-    
-    // Reset and close
-    setFoodForm({ id: null, name: '', category: '', price: '', image: '', status: 'Active' });
-    setShowFoodForm(false);
-  };
-
-  const editFood = (food) => {
-    setFoodForm(food);
-    setShowFoodForm(true);
-  };
-
-  const deleteFood = (id) => {
-    if (window.confirm("Are you sure you want to delete this food item?")) {
-      setFoods(foods.filter(f => f.id !== id));
-    }
-  };
+  
 
   return (
     <section className="admin-wrap" id="admin">
@@ -95,29 +117,35 @@ export default function Admin() {
             <div className="admin-card" id="categoryManager">
               <div className="admin-card-head">
                 <h3>Manage Food Categories</h3>
-                <button className="btn btn-red btn-small" onClick={() => setCatForm({ id: null, name: '', icon: '', status: 'Active' })}>＋ Add Category</button>
+                <button className="btn btn-red btn-small" onClick={openAddCategoryForm}>＋ Add Category</button>
               </div>
               <div className="admin-table-wrap">
                 <table>
-                  <thead><tr><th>#</th><th>Category Name</th><th>Icon</th><th>Status</th><th>Action</th></tr></thead>
+                  <thead><tr><th>#</th><th>Category Name</th><th>Image</th><th>Status</th><th>Action</th></tr></thead>
                   <tbody>
                     {categories.map((cat, index) => (
-                      <tr key={cat.id}>
+                      <tr key={cat.categoryId}>
                         <td>{index + 1}</td>
-                        <td>{cat.name}</td>
-                        <td>{cat.icon}</td>
-                        <td>{cat.status}</td>
+                        <td>{cat.categoryName}</td>
+                       <td> <img src={cat.imagePath} alt="" className="admin-table-img" /></td>
+                      
                         <td>
-                          <button className="action-btn edit" onClick={() => editCategory(cat)}>Edit</button>
-                          <button className="action-btn delete" onClick={() => deleteCategory(cat.id)}>Delete</button>
+                        <span className={`status ${cat.isActive === 1 || cat.isActive === true ? 'Active' : 'inactive'}`}>
+                          {cat.isActive === 1 || cat.isActive === true ? 'Active' : 'Inactive'}
+                        </span>
+                      </td>
+                        <td>
+                          <button className="action-btn edit" onClick={() => editCategory(cat.categoryId)}>Edit</button>
+                          <button className="action-btn delete" onClick={() => deleteCategory(cat.categoryId)}>Delete</button>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-              </div>
-              
-              {/* Category Form */}
+              </div> 
+            </div>
+                 {/* Category Form */}
+               {showCatForm && (
               <div className="admin-form-container">
                 <h3>{catForm.id ? 'Edit Category' : 'Add Category'}</h3>
                 <form onSubmit={handleCatSubmit}>
@@ -126,8 +154,18 @@ export default function Admin() {
                     <input required value={catForm.name} onChange={e => setCatForm({...catForm, name: e.target.value})} placeholder="e.g. Momos" />
                   </div>
                   <div className="form-group">
-                    <label>Icon / Emoji</label>
-                    <input value={catForm.icon} onChange={e => setCatForm({...catForm, icon: e.target.value})} placeholder="e.g. 🥟" />
+                    <label>Category Image</label>
+                     {/* File Upload Input */}
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={handleImageChange} 
+                      style={{ padding: '8px', border: '1px dashed #ccc', background: '#f9f9f9' }}
+                    />
+                    {/* Show Preview */}
+                    {imagePreview && (
+                      <img src={imagePreview} alt="Preview" style={{ width: '50px', height: '50px', marginTop: '10px', borderRadius: '50%', objectFit: 'cover' }} />
+                    )}
                   </div>
                   <div className="form-group">
                     <label>Status</label>
@@ -138,78 +176,12 @@ export default function Admin() {
                   </div>
                   <div className="form-actions">
                     <button className="btn btn-red" type="submit">💾 Save Category</button>
+                    <button class="btn btn-outline" onClick={() => setShowCatForm(false)} type="button" >Cancel</button>
                   </div>
                 </form>
               </div>
-            </div>
-
-            {/* FOOD MANAGER */}
-            <div className="admin-card" id="foodManager" style={{ gridColumn: '1 / -1' }}>
-              <div className="admin-card-head">
-                <h3>Manage Menu Items</h3>
-                <button className="btn btn-red btn-small" onClick={() => { setFoodForm({ id: null, name: '', category: '', price: '', image: '', status: 'Active' }); setShowFoodForm(true); }}>＋ Add Food Item</button>
-              </div>
-              <div className="admin-table-wrap">
-                <table>
-                  <thead><tr><th>Item</th><th>Category</th><th>Price</th><th>Status</th><th>Action</th></tr></thead>
-                  <tbody>
-                    {foods.map((food) => (
-                      <tr key={food.id}>
-                        <td>{food.name}</td>
-                        <td>{food.category}</td>
-                        <td>₹{food.price}</td>
-                        <td>{food.status}</td>
-                        <td>
-                          <button className="action-btn edit" onClick={() => editFood(food)}>Edit</button>
-                          <button className="action-btn delete" onClick={() => deleteFood(food.id)}>Delete</button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Food Form */}
-              {showFoodForm && (
-                <div className="admin-form-container" style={{ borderTop: '1px solid var(--line)', marginTop: '18px', paddingTop: '18px' }}>
-                  <h3>{foodForm.id ? 'Edit Food Item' : 'Add Food Item'}</h3>
-                  <form onSubmit={handleFoodSubmit}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '12px' }}>
-                      <div className="form-group">
-                        <label>Food Name *</label>
-                        <input required value={foodForm.name} onChange={e => setFoodForm({...foodForm, name: e.target.value})} placeholder="e.g. Paneer Burger" />
-                      </div>
-                      <div className="form-group">
-                        <label>Category *</label>
-                        <select required value={foodForm.category} onChange={e => setFoodForm({...foodForm, category: e.target.value})}>
-                          <option value="">Select Category</option>
-                          {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label>Price (₹) *</label>
-                        <input type="number" required value={foodForm.price} onChange={e => setFoodForm({...foodForm, price: e.target.value})} placeholder="e.g. 80" />
-                      </div>
-                      <div className="form-group">
-                        <label>Image URL (optional)</label>
-                        <input type="url" value={foodForm.image} onChange={e => setFoodForm({...foodForm, image: e.target.value})} placeholder="https://..." />
-                      </div>
-                      <div className="form-group">
-                        <label>Status</label>
-                        <select value={foodForm.status} onChange={e => setFoodForm({...foodForm, status: e.target.value})}>
-                          <option value="Active">Active</option>
-                          <option value="Inactive">Inactive</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="form-actions">
-                      <button className="btn btn-red" type="submit">💾 Save Food Item</button>
-                      <button className="btn btn-outline" type="button" onClick={() => setShowFoodForm(false)}>Cancel</button>
-                    </div>
-                  </form>
-                </div>
-              )}
-            </div>
+              )} 
+            
 
           </div>
         </div>
