@@ -37,6 +37,7 @@ namespace Repositories
                             CategoryId = Convert.ToInt32(dt.Rows[i]["CategoryId"]),
                             CategoryName = Convert.ToString(dt.Rows[i]["CategoryName"]),
                             ImagePath= Convert.ToString(dt.Rows[i]["ImagePath"]),
+                            IsActive= Convert.ToInt32(dt.Rows[i]["IsActive"])
                         });
                     }
                     OR.Data = li;
