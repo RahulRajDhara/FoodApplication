@@ -98,5 +98,40 @@ namespace Repositories
 
             return OR;
         }
-    }
+
+        public OperationResponse AddEditFoodCategory(FoodCategory Fcdata)
+        {
+            OperationResponse OR = new OperationResponse();
+            List<SqlParameter> lstparam = new List<SqlParameter>();
+            int Status = 0;
+            string Message = "";
+            DBHelper dh = new DBHelper();
+            lstparam.Add(new SqlParameter("@In_CategoryId", SqlDbType.Int) { Direction = ParameterDirection.Input, Value = Fcdata.CategoryId });
+            lstparam.Add(new SqlParameter("@In_CategoryName", SqlDbType.VarChar) { Direction = ParameterDirection.Input, Value = string.IsNullOrWhiteSpace(Fcdata.CategoryName) ? (object)DBNull.Value : Fcdata.CategoryName });
+            lstparam.Add(new SqlParameter("@In_Description", SqlDbType.VarChar) { Direction = ParameterDirection.Input, Value = "" });
+            lstparam.Add(new SqlParameter("@In_ImagePath", SqlDbType.VarChar) { Direction = ParameterDirection.Input, Value = string.IsNullOrWhiteSpace(Fcdata.ImagePath) ? (object)DBNull.Value : Fcdata.ImagePath });
+            lstparam.Add(new SqlParameter("@In_IsActive", SqlDbType.Int) { Direction = ParameterDirection.Input, Value = Fcdata.IsActive });
+
+
+            lstparam.Add(new SqlParameter("@Retvalue", SqlDbType.Int) { Direction = ParameterDirection.Output });
+            lstparam.Add(new SqlParameter("@GeneratedClientId", SqlDbType.VarChar, 200) { Direction = ParameterDirection.Output });
+            try
+            {
+                DataTable dt = dh.ExecuteDataTable("AddEditFoodCategory", lstparam, null, CommandType.StoredProcedure, out Status, out Message);
+
+                OR.Data = null;
+                OR.Status = Status;
+                OR.Message = Message;
+            }
+            catch (Exception ex)
+            {
+                OR.Data = null;
+                OR.Status = 0;
+                OR.Message = ex.Message;
+            }
+
+            return OR;
+        }
+
+        }
 }
