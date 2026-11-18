@@ -203,7 +203,7 @@ export default function Admin() {
                             ) : (
                               <span>—</span>
                             )}
-                          </td>
+                          </td> 
                           <td>
                             <span className={`status ${cat.isActive === 1 || cat.isActive === true ? 'Active' : 'inactive'}`}>
                               {cat.isActive === 1 || cat.isActive === true ? 'Active' : 'Inactive'}
